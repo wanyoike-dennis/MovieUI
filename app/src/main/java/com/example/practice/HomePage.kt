@@ -21,6 +21,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -40,9 +41,7 @@ fun HomePage(){
     )
     Column(modifier = Modifier.fillMaxSize()) {
         GreetingsSection()
-        Spacer(modifier = Modifier.height(4.dp))
         SearchArea()
-        Spacer(modifier = Modifier.height(4.dp))
         Categories(categories = listOfCategories)
         LatestMovieSection(list = listOfMovies)
     }
@@ -157,6 +156,8 @@ fun Categories(
 @Composable
 fun LatestMovieSection(list:List<Movie>){
     Column(
+        verticalArrangement = Arrangement.SpaceBetween,
+        horizontalAlignment = Alignment.CenterHorizontally,
         modifier= Modifier
             .fillMaxWidth()
             .padding(12.dp)
@@ -164,15 +165,23 @@ fun LatestMovieSection(list:List<Movie>){
         BigTextCategory(text = "Latest Movie")
         LazyRow(){
             items(list.size){
-                Column(){
+                Column(
+                    verticalArrangement = Arrangement.SpaceBetween,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.padding(end=4.dp)
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(Color(0xFFE7F1F1))
+                ){
                     Image(
                         painter =list[it].painter ,
                         contentDescription = list[it].title,
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
-                            .size(100.dp)
+                            .size(150.dp)
                         )
-                    Text(text = list[it].title)
+                    Text(text = list[it].title,
+                        overflow = TextOverflow.Ellipsis
+                        )
                 }
             }
         }
