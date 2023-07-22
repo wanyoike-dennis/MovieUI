@@ -26,6 +26,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.practice.ui.theme.*
 
 @Composable
 fun HomePage(){
@@ -45,21 +46,28 @@ fun HomePage(){
         BottomMenuContent("Play",R.drawable.ic_play),
         BottomMenuContent("Profile",R.drawable.ic_profile)
     )
-
-    Column(modifier = Modifier.fillMaxSize()
-    ) {
-        GreetingsSection()
-        SearchArea()
-        Categories(categories = listOfCategories)
-        LatestMovieSection(
-            text="Latest Movies",
-            list = listOfMovies)
-        LatestMovieSection(
-            text="Popular Movies",
-            list = listOfMovies)
-        BottomMenu(item = listOfMenuItems
+    Box(
+        modifier = Modifier.background(LightGreen3)
+    ){
+        Column(modifier = Modifier.fillMaxSize()
+        ) {
+            GreetingsSection()
+            SearchArea()
+            Categories(categories = listOfCategories)
+            LatestMovieSection(
+                text = "Latest Movies",
+                list = listOfMovies
+            )
+            LatestMovieSection(
+                text = "Popular Movies",
+                list = listOfMovies
             )
 
+        }
+        BottomMenu(
+            item = listOfMenuItems,
+            modifier = Modifier.align(Alignment.BottomCenter)
+        )
     }
 }
 
@@ -116,11 +124,11 @@ fun SearchArea(){
            modifier = Modifier
                .fillMaxWidth()
                .background(
-                   Color(0xFFE7F1F1),
+                   LightGreen1,
                    RoundedCornerShape(16.dp)
                ),
            leadingIcon = {Icon(Icons.Filled.Search , null,tint=Color.Gray)},
-           placeholder = {Text(text= "Search for a movie ")},
+           placeholder = {Text(text= "Search for a movie ",color=Color.Black)},
            colors= TextFieldDefaults.textFieldColors(
                focusedIndicatorColor = Color.Transparent,
                unfocusedIndicatorColor = Color.Transparent,
@@ -151,15 +159,16 @@ fun Categories(categories:List<String>){
                     modifier= Modifier
                         .fillMaxWidth()
                         .padding(end = 4.dp)
+                        .background(
+                            LightGreen1,
+                            RoundedCornerShape(16.dp)
+                        )
                 ){
                     Text(
                         text= categories[it],
                         modifier = Modifier
                             .padding(8.dp)
-                            .background(
-                                Color(0xFFE7F1F1),
-                                RoundedCornerShape(16.dp)
-                            )
+                            
                     )
                 }
             }
@@ -185,14 +194,14 @@ fun LatestMovieSection(text:String, list:List<Movie>){
                     modifier = Modifier
                         .padding(end = 4.dp)
                         .clip(RoundedCornerShape(16.dp))
-                        .background(Color(0xFFE7F1F1))
+                        .background(LightGreen1)
                 ){
                     Image(
                         painter =list[it].painter ,
                         contentDescription = list[it].title,
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
-                            .size(150.dp)
+                            .size(160.dp)
                         )
                     Text(text = list[it].title,
                         overflow = TextOverflow.Ellipsis
@@ -215,9 +224,9 @@ fun BigTextCategory(text:String){
             fontSize = 20.sp
         )
         Text(
-            text ="View all",
-            fontStyle = FontStyle.Italic,
-            color= Color.Magenta
+            text ="View all >",
+            modifier = Modifier.padding(end=4.dp)
+            
         )
     }
 }
@@ -226,7 +235,7 @@ fun BigTextCategory(text:String){
 fun BottomMenu(
     item:List<BottomMenuContent>,
     modifier: Modifier = Modifier,
-    activeHighlightedColor: Color = Color(0xFFE7F1F1),
+    activeHighlightedColor: Color = LightGreen2,
     activeTextColor: Color = Color.White,
     inactiveTextColor:Color = Color.Transparent,
     initialSelectedItemIndex : Int = 0
@@ -243,7 +252,9 @@ fun BottomMenu(
         modifier = modifier
             .fillMaxWidth()
             .padding(12.dp)
-            .clip(RoundedCornerShape(10.dp))
+            .background(LightGreen1)
+            .padding(top=6.dp)
+            
     ){
         item.forEachIndexed { index, item ->
             BottomMenuItem(
@@ -263,8 +274,8 @@ fun BottomMenu(
 fun BottomMenuItem(
     item:BottomMenuContent,
     isSelected:Boolean =false,
-    activeHighlightedColor:Color = Color.Blue,
-    activeTextColor:Color = Color.Gray,
+    activeHighlightedColor:Color = Color.Green,
+    activeTextColor:Color = TextWhite,
     inactiveTextColor:Color = Color.Black,
     onItemClick:() -> Unit
 ){
@@ -277,20 +288,20 @@ fun BottomMenuItem(
             contentAlignment = Alignment.Center,
             modifier = Modifier
                 .clip(RoundedCornerShape(10.dp))
-                .background(if (isSelected) activeHighlightedColor else Color.Transparent)
+                .background(if (isSelected) activeHighlightedColor else LightGreen3)
                 .padding(10.dp)
 
         ){
             Icon(
                 painter = painterResource(id = item.iconId),
                 contentDescription = item.title,
-                tint= if(isSelected) activeTextColor else Color.Transparent,
+                tint= if(isSelected) activeTextColor else Color.Black,
                 modifier = Modifier.size(20.dp)
             )
         }
         Text(
             text = item.title,
-        color= if(isSelected) activeTextColor else inactiveTextColor
+        color= if(isSelected) activeTextColor else Color.Black
         )
     }
 }
