@@ -3,6 +3,7 @@ package com.example.practice
 import android.graphics.drawable.Icon
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -39,11 +40,26 @@ fun HomePage(){
         Movie(painterResource(id = R.drawable.master_logical_thinking),"Master logical thinking"),
         Movie(painterResource(id = R.drawable.multiple_languages),"Multiple Languages"),
     )
-    Column(modifier = Modifier.fillMaxSize()) {
+    val listOfMenuItems= listOf(
+        BottomMenuContent("Home",R.drawable.ic_home),
+        BottomMenuContent("Play",R.drawable.ic_play),
+        BottomMenuContent("Profile",R.drawable.ic_profile)
+    )
+
+    Column(modifier = Modifier.fillMaxSize()
+    ) {
         GreetingsSection()
         SearchArea()
         Categories(categories = listOfCategories)
-        LatestMovieSection(list = listOfMovies)
+        LatestMovieSection(
+            text="Latest Movies",
+            list = listOfMovies)
+        LatestMovieSection(
+            text="Popular Movies",
+            list = listOfMovies)
+        BottomMenu(item = listOfMenuItems
+            )
+
     }
 }
 
@@ -118,9 +134,7 @@ fun SearchArea(){
 }
 
 @Composable
-fun Categories(
-    categories:List<String>
-){
+fun Categories(categories:List<String>){
     Column(
         verticalArrangement = Arrangement.SpaceEvenly,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -154,7 +168,7 @@ fun Categories(
 }
 
 @Composable
-fun LatestMovieSection(list:List<Movie>){
+fun LatestMovieSection(text:String, list:List<Movie>){
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -162,13 +176,14 @@ fun LatestMovieSection(list:List<Movie>){
             .fillMaxWidth()
             .padding(12.dp)
     ){
-        BigTextCategory(text = "Latest Movie")
+        BigTextCategory(text = text)
         LazyRow(){
             items(list.size){
                 Column(
                     verticalArrangement = Arrangement.SpaceBetween,
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.padding(end=4.dp)
+                    modifier = Modifier
+                        .padding(end = 4.dp)
                         .clip(RoundedCornerShape(16.dp))
                         .background(Color(0xFFE7F1F1))
                 ){
@@ -207,6 +222,78 @@ fun BigTextCategory(text:String){
     }
 }
 
+@Composable
+fun BottomMenu(
+    item:List<BottomMenuContent>,
+    modifier: Modifier = Modifier,
+    activeHighlightedColor: Color = Color(0xFFE7F1F1),
+    activeTextColor: Color = Color.White,
+    inactiveTextColor:Color = Color.Transparent,
+    initialSelectedItemIndex : Int = 0
+){
+
+    var selectedItemIndex by remember{
+        mutableStateOf(initialSelectedItemIndex)
+    }
+
+
+    Row(
+        horizontalArrangement = Arrangement.SpaceAround,
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(12.dp)
+            .clip(RoundedCornerShape(10.dp))
+    ){
+        item.forEachIndexed { index, item ->
+            BottomMenuItem(
+                item = item,
+                isSelected = index == selectedItemIndex,
+                activeHighlightedColor=activeHighlightedColor,
+                activeTextColor= activeTextColor,
+                inactiveTextColor=inactiveTextColor
+            ){
+                selectedItemIndex = index
+            }
+        }
+    }
+}
+
+@Composable
+fun BottomMenuItem(
+    item:BottomMenuContent,
+    isSelected:Boolean =false,
+    activeHighlightedColor:Color = Color.Blue,
+    activeTextColor:Color = Color.Gray,
+    inactiveTextColor:Color = Color.Black,
+    onItemClick:() -> Unit
+){
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier.clickable { onItemClick }
+    ){
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .clip(RoundedCornerShape(10.dp))
+                .background(if (isSelected) activeHighlightedColor else Color.Transparent)
+                .padding(10.dp)
+
+        ){
+            Icon(
+                painter = painterResource(id = item.iconId),
+                contentDescription = item.title,
+                tint= if(isSelected) activeTextColor else Color.Transparent,
+                modifier = Modifier.size(20.dp)
+            )
+        }
+        Text(
+            text = item.title,
+        color= if(isSelected) activeTextColor else inactiveTextColor
+        )
+    }
+}
 @Preview(showBackground =true)
 @Composable
 fun HomePagePreview(){
