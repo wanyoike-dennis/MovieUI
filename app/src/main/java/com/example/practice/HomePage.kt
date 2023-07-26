@@ -1,9 +1,7 @@
 package com.example.practice
 
 import android.graphics.drawable.Icon
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -16,6 +14,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -34,25 +33,32 @@ fun HomePage(){
         "Action","Comedy","Romance","Sci-Fiction","Documentary","Bl"
     )
     val listOfMovies= listOf(
-        Movie(painterResource(id = R.drawable.bad_habits),"Bad Habits"),
-        Movie(painterResource(id = R.drawable.intermediate_dev),"Intermediate Devs"),
-        Movie(painterResource(id = R.drawable.kmm),"KMM"),
-        Movie(painterResource(id = R.drawable.learn_coding_fast),"Learn coding fast"),
-        Movie(painterResource(id = R.drawable.master_logical_thinking),"Master logical thinking"),
+        Movie(painterResource(id = R.drawable.transformers),"Transformers:Rise of beasts"),
+        Movie(painterResource(id = R.drawable.fast_x),"Fast-X"),
+        Movie(painterResource(id = R.drawable.flash),"Flash"),
+
+    )
+    val listOfPopular= listOf(
+        Movie(painterResource(id = R.drawable.john_wick4),"John Wick: Chapter 4"),
+        Movie(painterResource(id = R.drawable.resident_evil),"Resident Evil: Death Island"),
         Movie(painterResource(id = R.drawable.multiple_languages),"Multiple Languages"),
     )
     val listOfMenuItems= listOf(
         BottomMenuContent("Home",R.drawable.ic_home),
+        BottomMenuContent("Shows",R.drawable.ic_igtv),
         BottomMenuContent("Play",R.drawable.ic_play),
         BottomMenuContent("Profile",R.drawable.ic_profile)
     )
     Box(
         modifier = Modifier.background(LightGreen3)
     ){
-        Column(modifier = Modifier.fillMaxSize()
+        Column(modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
         ) {
             GreetingsSection()
             SearchArea()
+
             Categories(categories = listOfCategories)
             LatestMovieSection(
                 text = "Latest Movies",
@@ -60,7 +66,7 @@ fun HomePage(){
             )
             LatestMovieSection(
                 text = "Popular Movies",
-                list = listOfMovies
+                list = listOfPopular
             )
 
         }
@@ -144,12 +150,13 @@ fun SearchArea(){
 @Composable
 fun Categories(categories:List<String>){
     Column(
-        verticalArrangement = Arrangement.SpaceEvenly,
+        verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier= Modifier
             .fillMaxWidth()
             .padding(12.dp)) {
         BigTextCategory(text = "Categories")
+        Spacer(Modifier.height(4.dp))
         LazyRow(
 
         ){
@@ -186,6 +193,7 @@ fun LatestMovieSection(text:String, list:List<Movie>){
             .padding(12.dp)
     ){
         BigTextCategory(text = text)
+        Spacer(Modifier.height(4.dp))
         LazyRow(){
             items(list.size){
                 Column(
@@ -252,8 +260,9 @@ fun BottomMenu(
         modifier = modifier
             .fillMaxWidth()
             .padding(12.dp)
-            .background(LightGreen1)
-            .padding(top=6.dp)
+            .background(LightGreen1, RoundedCornerShape(12.dp))
+            .padding(top = 6.dp)
+
             
     ){
         item.forEachIndexed { index, item ->
