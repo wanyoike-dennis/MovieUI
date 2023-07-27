@@ -3,6 +3,7 @@ package com.example.practice
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
@@ -26,7 +27,7 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun DetailsPage(){
  ImageCard(
-     painter = painterResource(id = R.drawable.bad_habits),
+     painter = painterResource(id = R.drawable.john_wick4),
      contentDescription = "picture",
      title = "Fast-X" ,
      rating = "6.8",
@@ -48,13 +49,15 @@ fun ImageCard(
     modifier:Modifier = Modifier
 ){
     Card(
+        modifier = modifier.fillMaxSize(),
         shape = RoundedCornerShape(16.dp),
         elevation = 5.dp
     ) {
         Box(
-            modifier = Modifier,
+            modifier = Modifier.fillMaxSize(),
         ){
            Image(
+               modifier=Modifier.fillMaxSize(),
                painter = painter, 
                contentDescription =contentDescription,
                contentScale = ContentScale.Crop
@@ -69,19 +72,21 @@ fun ImageCard(
             Box(modifier = Modifier
                 .fillMaxWidth()
                 .padding(4.dp),
-                contentAlignment = Alignment.BottomStart
+                contentAlignment = Alignment.BottomStart,
+
             ){
                 Text(
                     text = title,
                     style= TextStyle(color= Color.White,fontSize=16.sp)
                     )
-                Text(text=rating)
+                Text(text=rating,style= TextStyle(color= Color.White,fontSize=16.sp))
                 LazyRow{
                     items(category.size){
                         cat ->
-                        Text(text = category[cat])
+                        Text(text = category[cat], color= Color.White,fontSize=16.sp)
                     }
                 }
+                Text(text=description,style= TextStyle(color= Color.White,fontSize=16.sp))
                 
             }
         }
